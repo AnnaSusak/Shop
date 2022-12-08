@@ -1,0 +1,31 @@
+﻿@model MyModel
+<h1 class="font-weight-light font-italic text-uppercase">Edit Category</h1>
+<form method="post">
+    <!--предача скрытых данных-->
+    <input asp-for="Id" hidden />
+    <p>
+        <label class="fst-italic" asp-for="Name"></label>
+        <input class="form-control form-control-lg" asp-for="Name" placeholder="name" />
+        <span class="text-danger" asp-validation-for="Name"></span>
+    </p>
+    <p>
+        <label class="fst-italic" asp-for="Number"></label>
+        <input class="form-control form-control-lg" type="number" asp-for="Number" placeholder="1" />
+        <span class="text-danger" asp-validation-for="Number"></span>
+    </p>
+    <p>
+        <button type="submit" class="btn btn-primary">
+            <i class="fa-solid fa-check"></i>
+        </button>
+        <a asp-controller="MyModel" asp-action="Index" class="btn bg-dark text-light font-weight-bold"><i class="fa-solid fa-chevron-left"></i></a>
+    </p>
+    <p>
+        <div asp-validation-summary="All"></div>
+    </p>
+</form>
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}
+

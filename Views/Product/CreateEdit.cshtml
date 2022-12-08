@@ -1,0 +1,94 @@
+﻿@model Shop.Models.ViewModels.ProductViewModel
+@{ var title = "Create Product";}
+@if (Model.Product.Id != 0)
+{
+    title = "Edit Product";
+}
+<h1 class="font-weight-light font-italic text-uppercase">@title</h1>
+<form method="post" enctype="multipart/form-data">
+    <!--предача скрытых данных-->
+
+    <input asp-for="Product.Id" hidden />
+    <p>
+        <label class="fst-italic" asp-for="Product.Name"></label>
+        <input class="form-control form-control-lg" asp-for="Product.Name" placeholder="name" />
+        <span class="text-danger" asp-validation-for="Product.Name"></span>
+    </p>
+    <p>
+        <label class="fst-italic" asp-for="Product.Price"></label>
+        <input class="form-control form-control-lg" type="number" asp-for="Product.Price" placeholder="1" />
+        <span class="text-danger" asp-validation-for="Product.Price"></span>
+    </p>
+    <p>
+        <label class="fst-italic" asp-for="Product.Description"></label>
+        <textarea asp-for="Product.Description" class="summernote form-control form-control-lg"></textarea>
+        <span class="text-danger" asp-validation-for="Product.Description"></span>
+        <!--<input class="form-control form-control-lg"  asp-for="Product.Description" placeholder="description" />-->
+    </p>
+    <p>
+        <label class="fst-italic" asp-for="Product.Image"></label>
+        <input class="form-control form-control-lg" type="file"
+               name="files" multiple id="uploadedImage" />
+    </p>
+    <p>
+        <label class="fst-italic" asp-for="Product.CategoryId"></label>
+        <!--<select class="form-control form-control-lg" asp-for="CategoryId" asp-items="ViewBag.CategoriesList">
+        <option disabled selected>--Choose a category</option>
+    </select>-->
+        <select class="form-control form-control-lg" asp-for="Product.CategoryId" asp-items="@Model.CategoriesList">
+            <option disabled selected>--Choose a category</option>
+        </select>
+        <span class="text-danger" asp-validation-for="Product.CategoryId"></span>
+    </p>
+    <p>
+        <label class="fst-italic" asp-for="Product.MyModelId"></label>
+        <select class="form-control form-control-lg" asp-for="Product.MyModelId" asp-items="@Model.MyModelsList">
+            <option disabled selected>--Choose a model</option>
+        </select>
+        <span class="text-danger" asp-validation-for="Product.MyModelId"></span>
+    </p>
+    <p>
+        <button type="submit" class="btn btn-primary" onclick="input()">
+            <i class="fa-solid fa-check"></i>
+        </button>
+        <a asp-controller="Product" asp-action="Index" class="btn bg-dark text-light font-weight-bold"><i class="fa-solid fa-chevron-left"></i></a>
+    </p>
+    <p>
+        <div asp-validation-summary="All"></div>
+    </p>
+</form>
+@if (Model.Product.Id!=0) { 
+<p>
+    <img src="@PathManager.ImageProductPath@Model.Product.Image" width="100" />
+</p>
+}
+
+@section Scripts{
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+
+<script>
+    /*editor*/
+        $(document).ready(function() {
+            $('.summernote').summernote(
+                {
+                    height:200
+                }
+            );
+    });
+    function input() {
+        if (document.getElementById("uploadedImage").value=="") {
+            Swal.fire(
+                'Error',
+                'Please, upload an image!',
+                'error'
+            )
+            return false;
+        }
+        return true;
+    }
+</script>
+}
+
+
