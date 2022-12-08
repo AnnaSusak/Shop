@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "LU2NqKDuO6GDo3HRbJDnyo04+/y0jm/jn5zFZQVIIAM=",
+  "Hash": "3C1XRnDRzqTWdze1qwgrpW5yh2FvCAllhrupEo03gF0=",
   "Source": "Shop",
   "BasePath": "_content/Shop",
   "Mode": "Default",
@@ -36021,6 +36021,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\images\\product\\a6e6e091-bc74-4039-beee-1dce39d50a26.jpg"
+    },
+    {
+      "Identity": "E:\\qnap\\Multimedia\\lenovo_g570\\disk_e\\USERS\\Аня\\с#\\Shop\\Shop\\wwwroot\\images\\product\\b5fefce2-5940-4201-a6f6-a79d66ad8ef6.jpg",
+      "SourceId": "Shop",
+      "SourceType": "Discovered",
+      "ContentRoot": "E:\\qnap\\Multimedia\\lenovo_g570\\disk_e\\USERS\\Аня\\с#\\Shop\\Shop\\wwwroot\\",
+      "BasePath": "_content/Shop",
+      "RelativePath": "images/product/b5fefce2-5940-4201-a6f6-a79d66ad8ef6.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\product\\b5fefce2-5940-4201-a6f6-a79d66ad8ef6.jpg"
     },
     {
       "Identity": "E:\\qnap\\Multimedia\\lenovo_g570\\disk_e\\USERS\\Аня\\с#\\Shop\\Shop\\wwwroot\\images\\product\\bb2cb676-0af3-44d3-871c-016c08b1696f.jpg",

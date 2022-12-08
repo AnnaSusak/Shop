@@ -15,6 +15,7 @@ namespace Shop.Controllers
 {
     public class ProductController : Controller
     {
+        //comment
         private ApplicationDbContext db;
         private IWebHostEnvironment webHostEnvironment;
         public ProductController(ApplicationDbContext db, IWebHostEnvironment webHostEnvironment)
