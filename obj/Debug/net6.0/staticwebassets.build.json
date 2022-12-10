@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "3C1XRnDRzqTWdze1qwgrpW5yh2FvCAllhrupEo03gF0=",
+  "Hash": "RRpIZvBc7R0XmxBkTwAl3dXi5krXSpGwxGXGrxvvTDM=",
   "Source": "Shop",
   "BasePath": "_content/Shop",
   "Mode": "Default",
@@ -35887,6 +35887,23 @@
       "OriginalItemSpec": "wwwroot\\fontawesome\\webfonts\\fa-v4compatibility.woff2"
     },
     {
+      "Identity": "E:\\qnap\\Multimedia\\lenovo_g570\\disk_e\\USERS\\Аня\\с#\\Shop\\Shop\\wwwroot\\images\\product\\38a7dbaf-fa57-423d-bdc0-5c4a7e2bd948.jpg",
+      "SourceId": "Shop",
+      "SourceType": "Discovered",
+      "ContentRoot": "E:\\qnap\\Multimedia\\lenovo_g570\\disk_e\\USERS\\Аня\\с#\\Shop\\Shop\\wwwroot\\",
+      "BasePath": "_content/Shop",
+      "RelativePath": "images/product/38a7dbaf-fa57-423d-bdc0-5c4a7e2bd948.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\product\\38a7dbaf-fa57-423d-bdc0-5c4a7e2bd948.jpg"
+    },
+    {
       "Identity": "E:\\qnap\\Multimedia\\lenovo_g570\\disk_e\\USERS\\Аня\\с#\\Shop\\Shop\\wwwroot\\images\\product\\3a2c083f-5508-4e6a-8c98-1091ee52ec08.jpg",
       "SourceId": "Shop",
       "SourceType": "Discovered",
@@ -36072,6 +36089,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\images\\product\\d9cfeca6-bca8-46f6-b650-969956913ded.jpg"
+    },
+    {
+      "Identity": "E:\\qnap\\Multimedia\\lenovo_g570\\disk_e\\USERS\\Аня\\с#\\Shop\\Shop\\wwwroot\\images\\product\\eb4019e0-b189-4fe1-b468-e60d916a8d3e.PNG",
+      "SourceId": "Shop",
+      "SourceType": "Discovered",
+      "ContentRoot": "E:\\qnap\\Multimedia\\lenovo_g570\\disk_e\\USERS\\Аня\\с#\\Shop\\Shop\\wwwroot\\",
+      "BasePath": "_content/Shop",
+      "RelativePath": "images/product/eb4019e0-b189-4fe1-b468-e60d916a8d3e.PNG",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\images\\product\\eb4019e0-b189-4fe1-b468-e60d916a8d3e.PNG"
     },
     {
       "Identity": "E:\\qnap\\Multimedia\\lenovo_g570\\disk_e\\USERS\\Аня\\с#\\Shop\\Shop\\wwwroot\\images\\product\\ef2d9d2f-27d0-4b9d-b102-7f12d65ab0ae.PNG",

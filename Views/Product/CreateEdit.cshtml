@@ -25,6 +25,12 @@
         <span class="text-danger" asp-validation-for="Product.Description"></span>
         <!--<input class="form-control form-control-lg"  asp-for="Product.Description" placeholder="description" />-->
     </p>
+     <p>
+        <label class="fst-italic" asp-for="Product.ShortDescription"></label>
+        <input asp-for="Product.ShortDescription" class=" form-control form-control-lg"/>
+        <span class="text-danger" asp-validation-for="Product.ShortDescription"></span>
+        <!--<input class="form-control form-control-lg"  asp-for="Product.Description" placeholder="description" />-->
+    </p>
     <p>
         <label class="fst-italic" asp-for="Product.Image"></label>
         <input class="form-control form-control-lg" type="file"

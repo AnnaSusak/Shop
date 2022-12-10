@@ -14,6 +14,7 @@ namespace Shop.Models
         [Required]
         public string Name { get; set; }
         public string Description { get; set; }
+        public string ShortDescription { get; set; }
         [Required]
         [Range(1, int.MaxValue, ErrorMessage = "Value must be more than 0.")]
         public double Price { get; set; }

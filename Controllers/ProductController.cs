@@ -161,11 +161,11 @@ namespace Shop.Controllers
         [HttpPost]
         public IActionResult DeletePost(int? id)
         {
-            var product = db.Product.Find(id);
-            if (product == null)
+            if(id==null)
             {
                 return NotFound();
             }
+            var product = db.Product.Find(id);
             string wwwRoot = webHostEnvironment.WebRootPath;
             string upload = wwwRoot + PathManager.ImageProductPath;
             var oldFile = upload + product.Image;
