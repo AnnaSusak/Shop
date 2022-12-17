@@ -1,0 +1,41 @@
+﻿@model Shop.Models.ViewModels.DetailsViewModel
+<form method="post" asp-action="DetailsPost" asp-controller="Home">
+    <p>
+        <input asp-for="Product.Id" hidden/>
+    </p>
+<p>
+    <h2>
+        @Model.Product.Name
+    </h2>
+    <h2>
+        @Model.Product.Price
+    </h2>
+    <p>
+        <img widht="200" src="@PathManager.ImageProductPath@Model.Product.Image"/>
+    </p>
+    <p>
+        <h3>
+            @Model.Product.Category.Name</h3>
+        </h3>
+    </p>
+    <p>
+        @Html.Raw(Model.Product.Description)
+    </p>
+    <p>
+        <a asp-action="Index" class="btn bg-dark text-light font-weight-bold"><i class="fa-solid fa-chevron-left"></i></a>
+            @if (Model.IsInCart)
+            {
+                <a asp-action="RemoveFromCart" asp-route-Id="@Model.Product.Id" class="btn btn-warning">
+                    Remove from Cart
+                </a>
+            }
+            else
+            {
+                        <button asp-route-Id="@Model.Product.Id" class="btn btn-primary" type="submit" asp-action="DetailsPost">
+                Add to cart
+            </button>
+            }
+            
+    </p>
+</p>
+</form>
