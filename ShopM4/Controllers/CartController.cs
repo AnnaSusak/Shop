@@ -11,24 +11,33 @@ using ShopM4_DataMigrations.Data;
 using ShopM4_Models;
 using ShopM4_Models.ViewModels;
 using ShopM4_Utility;
+using ShopM4_DataMigrations.Repository;
+using ShopM4_DataMigrations.Repository.IRepository;
 
 namespace ShopM4.Controllers
 {
     [Authorize]
     public class CartController : Controller
     {
-        ApplicationDbContext db;
+      //  ApplicationDbContext db;
 
         ProductUserViewModel productUserViewModel;
 
         IWebHostEnvironment webHostEnvironment;
-
         IEmailSender emailSender;
-
-        public CartController(ApplicationDbContext db, IWebHostEnvironment webHostEnvironment,
-            IEmailSender emailSender)
+        IRepositoryProduct repositoryProduct;
+        IRepositoryApplicationUser repositoryApplicationUser;
+        IRepositoryQueryHeader repositoryQueryHeader;
+        IRepositoryQueryDetail repositoryQueryDetail;
+        public CartController(IWebHostEnvironment webHostEnvironment,
+            IEmailSender emailSender, IRepositoryProduct repositoryProduct,
+            IRepositoryApplicationUser repositoryApplicationUser,
+            IRepositoryQueryHeader repositoryQueryHeader, IRepositoryQueryDetail repositoryQueryDetail)
         {
-            this.db = db;
+            this.repositoryQueryHeader=repositoryQueryHeader;
+            this.repositoryQueryDetail=repositoryQueryDetail;
+            this.repositoryApplicationUser= repositoryApplicationUser;
+            this.repositoryProduct = repositoryProduct;
             this.webHostEnvironment = webHostEnvironment;
             this.emailSender = emailSender;
         }
@@ -51,7 +60,8 @@ namespace ShopM4.Controllers
             List<int> productsIdInCart = cartList.Select(x => x.ProductId).ToList();
 
             // извлекаем сами продукты по списку id
-            IEnumerable<Product> productList = db.Product.Where(x => productsIdInCart.Contains(x.Id));
+            // IEnumerable<Product> productList = db.Product.Where(x => productsIdInCart.Contains(x.Id));
+            IEnumerable<Product> productList =repositoryProduct.GetAll(x => productsIdInCart.Contains(x.Id));
 
             return View(productList);
         }
@@ -114,6 +124,35 @@ namespace ShopM4.Controllers
             await emailSender.SendEmailAsync(productUserViewModel.ApplicationUser.Email, subject, body);
             await emailSender.SendEmailAsync("viosagmir@gmail.com", subject, body);
 
+            // добавление данных в БД по заказу
+            QueryHeader queryHeader= new QueryHeader()
+            {
+                ApplicationUserId= productUserViewModel.ApplicationUser.Id,
+                QueryDate= DateTime.Now,
+                FullName= productUserViewModel.ApplicationUser.FullName,
+                PhoneNumber= productUserViewModel.ApplicationUser.PhoneNumber,
+                Email= productUserViewModel.ApplicationUser.Email,
+                ApplicationUser= productUserViewModel.ApplicationUser
+            };
+            // получение юзера 2 вариант
+          //  var claimsIdentity = (ClaimsIdentity)User.Identity;
+          //  var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+
+            repositoryQueryHeader.Add( queryHeader );
+            repositoryQueryHeader.Save();
+
+            // запись деталей
+            foreach (var item in productUserViewModel.ProductList)
+            {
+                QueryDetail queryDetail =new QueryDetail() { 
+                    QueryHeader= queryHeader,
+                    QueryHeaderId=queryHeader.Id,
+                    Product=repositoryProduct.Find(item.Id),
+                    ProductId=item.Id
+                };
+                repositoryQueryDetail.Add( queryDetail );
+            }
+            repositoryQueryDetail.Save();
             return RedirectToAction("InquiryConfirmation");
         }
 
@@ -138,12 +177,12 @@ namespace ShopM4.Controllers
             List<int> productsIdInCart = cartList.Select(x => x.ProductId).ToList();
 
             // извлекаем сами продукты по списку id
-            IEnumerable<Product> productList = db.Product.Where(x => productsIdInCart.Contains(x.Id));
-
+          //  IEnumerable<Product> productList = db.Product.Where(x => productsIdInCart.Contains(x.Id));
+          IEnumerable<Product> productList = repositoryProduct.GetAll(x => productsIdInCart.Contains(x.Id));
 
             productUserViewModel = new ProductUserViewModel()
             {
-                ApplicationUser = db.ApplicationUser.FirstOrDefault(x => x.Id == claim.Value),
+                ApplicationUser = repositoryApplicationUser.FirstOrDefault(x => x.Id == claim.Value),
                 ProductList = productList.ToList()
             };
 
