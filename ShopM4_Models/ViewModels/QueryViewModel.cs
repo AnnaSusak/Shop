@@ -10,5 +10,6 @@ namespace ShopM4_Models.ViewModels
     {
         public QueryHeader QueryHeader { get; set; }
         public IEnumerable<QueryDetail> Details { get; set; }
+        public IEnumerable<QueryDetail> QueryDetail { get; set; }
     }
 }
