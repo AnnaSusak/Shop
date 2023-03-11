@@ -11,7 +11,6 @@ using ShopM4_DataMigrations.Data;
 using ShopM4_Models;
 using ShopM4_Models.ViewModels;
 using ShopM4_Utility;
-using ShopM4_DataMigrations.Repository;
 using ShopM4_DataMigrations.Repository.IRepository;
 
 namespace ShopM4.Controllers
@@ -19,27 +18,30 @@ namespace ShopM4.Controllers
     [Authorize]
     public class CartController : Controller
     {
-      //  ApplicationDbContext db;
+        // ApplicationDbContext db;
 
         ProductUserViewModel productUserViewModel;
 
         IWebHostEnvironment webHostEnvironment;
         IEmailSender emailSender;
+
         IRepositoryProduct repositoryProduct;
         IRepositoryApplicationUser repositoryApplicationUser;
+
         IRepositoryQueryHeader repositoryQueryHeader;
         IRepositoryQueryDetail repositoryQueryDetail;
+
         public CartController(IWebHostEnvironment webHostEnvironment,
             IEmailSender emailSender, IRepositoryProduct repositoryProduct,
             IRepositoryApplicationUser repositoryApplicationUser,
             IRepositoryQueryHeader repositoryQueryHeader, IRepositoryQueryDetail repositoryQueryDetail)
         {
-            this.repositoryQueryHeader=repositoryQueryHeader;
-            this.repositoryQueryDetail=repositoryQueryDetail;
-            this.repositoryApplicationUser= repositoryApplicationUser;
-            this.repositoryProduct = repositoryProduct;
             this.webHostEnvironment = webHostEnvironment;
             this.emailSender = emailSender;
+            this.repositoryApplicationUser = repositoryApplicationUser;
+            this.repositoryProduct = repositoryProduct;
+            this.repositoryQueryHeader = repositoryQueryHeader;
+            this.repositoryQueryDetail = repositoryQueryDetail;
         }
 
 
@@ -60,8 +62,9 @@ namespace ShopM4.Controllers
             List<int> productsIdInCart = cartList.Select(x => x.ProductId).ToList();
 
             // извлекаем сами продукты по списку id
-            // IEnumerable<Product> productList = db.Product.Where(x => productsIdInCart.Contains(x.Id));
-            IEnumerable<Product> productList =repositoryProduct.GetAll(x => productsIdInCart.Contains(x.Id));
+            //IEnumerable<Product> productList = db.Product.Where(x => productsIdInCart.Contains(x.Id));
+            IEnumerable<Product> productList =
+                repositoryProduct.GetAll(x => productsIdInCart.Contains(x.Id));
 
             return View(productList);
         }
@@ -95,9 +98,10 @@ namespace ShopM4.Controllers
         [HttpPost]
         public async Task<IActionResult> SummaryPost(ProductUserViewModel productUserViewModel)
         {
-            //work with user
-            var identityClaims=(ClaimsIdentity)User.Identity;
+            // work with user
+            var identityClaims = (ClaimsIdentity)User.Identity;
             var claim = identityClaims.FindFirst(ClaimTypes.NameIdentifier);
+
 
             // код для отправки сообщения
             // combine
@@ -129,34 +133,36 @@ namespace ShopM4.Controllers
             await emailSender.SendEmailAsync("viosagmir@gmail.com", subject, body);
 
             // добавление данных в БД по заказу
-            QueryHeader queryHeader= new QueryHeader()
+            QueryHeader queryHeader = new QueryHeader()
             {
-                ApplicationUserId= claim.Value,
-                QueryDate= DateTime.Now,
-                FullName= productUserViewModel.ApplicationUser.FullName,
-                PhoneNumber= productUserViewModel.ApplicationUser.PhoneNumber,
-                Email= productUserViewModel.ApplicationUser.Email,
-                ApplicationUser=repositoryApplicationUser.FirstOrDefault(x=>x.Id==claim.Value),
+                ApplicationUserId = claim.Value,
+                QueryDate = DateTime.Now,
+                FullName = productUserViewModel.ApplicationUser.FullName,
+                PhoneNumber = productUserViewModel.ApplicationUser.PhoneNumber,
+                Email = productUserViewModel.ApplicationUser.Email,
+                ApplicationUser = repositoryApplicationUser.FirstOrDefault(x => x.Id == claim.Value)
             };
-            // получение юзера 2 вариант
-          //  var claimsIdentity = (ClaimsIdentity)User.Identity;
-          //  var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
-            repositoryQueryHeader.Add( queryHeader );
+            repositoryQueryHeader.Add(queryHeader);
             repositoryQueryHeader.Save();
 
-            // запись деталей
+
+            // сделать запись деталей - всех продуктов в БД
             foreach (var item in productUserViewModel.ProductList)
             {
-                QueryDetail queryDetail =new QueryDetail() { 
-                    QueryHeader= queryHeader,
-                    QueryHeaderId=queryHeader.Id,
-                    Product=repositoryProduct.Find(item.Id),
-                    ProductId=item.Id
+                QueryDetail queryDetail = new QueryDetail()
+                {
+                    ProductId = item.Id,
+                    QueryHeaderId = queryHeader.Id,
+                    QueryHeader = queryHeader,
+                    Product = repositoryProduct.Find(item.Id)
                 };
-                repositoryQueryDetail.Add( queryDetail );
+
+                repositoryQueryDetail.Add(queryDetail);
             }
             repositoryQueryDetail.Save();
+
+
             return RedirectToAction("InquiryConfirmation");
         }
 
@@ -181,11 +187,13 @@ namespace ShopM4.Controllers
             List<int> productsIdInCart = cartList.Select(x => x.ProductId).ToList();
 
             // извлекаем сами продукты по списку id
-          //  IEnumerable<Product> productList = db.Product.Where(x => productsIdInCart.Contains(x.Id));
-          IEnumerable<Product> productList = repositoryProduct.GetAll(x => productsIdInCart.Contains(x.Id));
+            //IEnumerable<Product> productList = db.Product.Where(x => productsIdInCart.Contains(x.Id));
+            IEnumerable<Product> productList = repositoryProduct.GetAll(x => productsIdInCart.Contains(x.Id));
+
 
             productUserViewModel = new ProductUserViewModel()
             {
+                //ApplicationUser = db.ApplicationUser.FirstOrDefault(x => x.Id == claim.Value),
                 ApplicationUser = repositoryApplicationUser.FirstOrDefault(x => x.Id == claim.Value),
                 ProductList = productList.ToList()
             };
@@ -194,4 +202,3 @@ namespace ShopM4.Controllers
         }
     }
 }
-
