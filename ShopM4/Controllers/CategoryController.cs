@@ -48,7 +48,7 @@ namespace ShopM4.Controllers
             {
                 repositoryCategory.Add(category);
                 repositoryCategory.Save();
-
+                TempData["Success"] = "OK!";
                 return RedirectToAction("Index");  // переход на страницу категорий
             }
 

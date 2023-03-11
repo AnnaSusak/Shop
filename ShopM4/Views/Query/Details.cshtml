@@ -1,5 +1,6 @@
 ﻿@model ShopM4_Models.ViewModels.QueryViewModel
 <form method="post">
+    <input hidden asp-for="QueryHeader.Id"/>
     <a asp-action="Index" class="btn form-control btn-success">Back to queries</a>
     <h2>Information</h2>
     <table>
@@ -21,11 +22,18 @@
         </tr>
         <tr>
             <td><input type="submit" value="Change" class="btn form-control btn-info"/></td>
-            <td><input type="submit" value="Delete" class="btn form-control btn-danger" /></td>
+
+            <td><input formaction="/Query/Delete"  type="submit" value="Delete" class="btn form-control btn-danger" /></td>
+
+           
         </tr>
     </table>
     <br />
     <h2>Details</h2>
-    <h5>Product Name</h5>
-    <p>Price: 100р.</p>
+    @foreach (var item in Model.QueryDetail)
+    {
+        <h5>Product Name: @item.Product.Name</h5>
+        <p>Price: @item.Product.Price р</p>
+    }
+    
 </form>

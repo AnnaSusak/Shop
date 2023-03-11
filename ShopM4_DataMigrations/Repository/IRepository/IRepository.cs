@@ -21,7 +21,7 @@ namespace ShopM4_DataMigrations.Repository.IRepository
         );
 
         void Add(T item);
-
+        void Remove(IEnumerable<T> items);
         void Remove(T item);
 
         void Save();
