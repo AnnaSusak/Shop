@@ -70,7 +70,7 @@ public class HomeController : Controller
         {
             if (item.ProductId == id)
             {
-                detailsViewModel.IsInCart = true; 
+                detailsViewModel.IsInCart = true;
             }
         }
 
@@ -78,7 +78,7 @@ public class HomeController : Controller
     }
 
     [HttpPost]
-    public IActionResult DetailsPost(int id)
+    public IActionResult DetailsPost(int id, DetailsViewModel detailsViewModel)
     {
         List<Cart> cartList = new List<Cart>();
 
@@ -88,7 +88,7 @@ public class HomeController : Controller
             cartList = HttpContext.Session.Get<List<Cart>>(PathManager.SessionCart);
         }
 
-        cartList.Add(new Cart() { ProductId = id });
+        cartList.Add(new Cart() { ProductId = id, Count = detailsViewModel.Product.TempCount });
 
         HttpContext.Session.Set(PathManager.SessionCart, cartList);
 
@@ -130,4 +130,3 @@ public class HomeController : Controller
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 }
-

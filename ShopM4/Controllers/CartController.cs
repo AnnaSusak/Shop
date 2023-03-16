@@ -63,10 +63,37 @@ namespace ShopM4.Controllers
 
             // извлекаем сами продукты по списку id
             //IEnumerable<Product> productList = db.Product.Where(x => productsIdInCart.Contains(x.Id));
-            IEnumerable<Product> productList =
+            IEnumerable<Product> productListTemp =
                 repositoryProduct.GetAll(x => productsIdInCart.Contains(x.Id));
 
+            List<Product> productList = new List<Product>();
+
+            foreach (var item in cartList)
+            {
+                Product product = productListTemp.FirstOrDefault(x => x.Id == item.ProductId);
+                product.TempCount = item.Count;
+
+                productList.Add(product);
+            }
+
             return View(productList);
+        }
+
+
+        [HttpPost]
+        [ActionName("Index")]
+        public IActionResult IndexPost(IEnumerable<Product> products)
+        {
+            List<Cart> carts = new List<Cart>();
+
+            foreach (var product in products)
+            {
+                carts.Add(new Cart() { ProductId = product.Id, Count = product.TempCount });
+            }
+
+            HttpContext.Session.Set(PathManager.SessionCart, carts);
+
+            return RedirectToAction("Summary");
         }
 
         public IActionResult Remove(int id)
@@ -165,15 +192,44 @@ namespace ShopM4.Controllers
 
             return RedirectToAction("InquiryConfirmation");
         }
-
-
         [HttpPost]
         public IActionResult Summary()
         {
-            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            ApplicationUser applicationUser;
 
-            // если пользователь вошел в систему, то объект будет определен
-            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            if (User.IsInRole(PathManager.AdminRole))   // работа админа в корзине
+            {
+                // корзина заполняется на основании существуещего запроса
+                if (HttpContext.Session.Get<int>(PathManager.SessionQuery) != 0)
+                {
+                    // можем забрать данные из id запроса для юзера
+
+                    QueryHeader queryHeader = repositoryQueryHeader.FirstOrDefault(
+                        x => x.Id == HttpContext.Session.Get<int>(PathManager.SessionQuery));
+
+                    applicationUser = new ApplicationUser()
+                    {
+                        Email = queryHeader.Email,
+                        PhoneNumber = queryHeader.PhoneNumber,
+                        FullName = queryHeader.FullName
+                    };
+                }
+                else   // корзина заполняется админом ДЛЯ юзера 
+                {
+                    applicationUser = new ApplicationUser();
+                }
+            }
+            else    // работа юзера с корзиной
+            {
+                var claimsIdentity = (ClaimsIdentity)User.Identity;
+
+                // если пользователь вошел в систему, то объект будет определен
+                var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+
+                applicationUser = repositoryApplicationUser.FirstOrDefault(
+                    x => x.Id == claim.Value);
+            }
+
 
             List<Cart> cartList = new List<Cart>();
 
@@ -194,11 +250,37 @@ namespace ShopM4.Controllers
             productUserViewModel = new ProductUserViewModel()
             {
                 //ApplicationUser = db.ApplicationUser.FirstOrDefault(x => x.Id == claim.Value),
-                ApplicationUser = repositoryApplicationUser.FirstOrDefault(x => x.Id == claim.Value),
-                ProductList = productList.ToList()
+                ApplicationUser = applicationUser
             };
 
+            foreach (var item in cartList)
+            {
+                Product product = repositoryProduct.FirstOrDefault(x => x.Id == item.ProductId);
+                product.TempCount = item.Count;
+
+                productUserViewModel.ProductList.Add(product);
+            }
+
             return View(productUserViewModel);
+        }
+
+        [HttpPost]
+        public IActionResult Update(List<Product> products)
+        {
+            List<Cart> cartList = new List<Cart>();
+
+            foreach (var product in products)
+            {
+                cartList.Add(new Cart()
+                {
+                    ProductId = product.Id,
+                    Count = product.TempCount
+                });
+            }
+
+            HttpContext.Session.Set(PathManager.SessionCart, cartList);
+
+            return RedirectToAction("Index");
         }
     }
 }
