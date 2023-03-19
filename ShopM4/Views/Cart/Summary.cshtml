@@ -9,18 +9,49 @@
     <p>
         <label>Name</label>
         <input type="text" asp-for="@Model.ApplicationUser.FullName" class="form-control" />
+        <span asp-validation-for="ApplicationUser.FullName" class="text-danger" />
     </p>
 
     <p>
         <label>Phone</label>
-        <input type="text" asp-for="@Model.ApplicationUser.PhoneNumber" class="form-control" />
+        <input type="text" asp-for="@Model.ApplicationUser.PhoneNumber" required class="form-control" />
+        <span asp-validation-for="ApplicationUser.PhoneNumber" class="text-danger" />
     </p>
 
     <p>
         <label>Email</label>
-        <input type="text" asp-for="@Model.ApplicationUser.Email" class="form-control" />
+        <input type="text" asp-for="@Model.ApplicationUser.Email" required class="form-control" />
+        <span asp-validation-for="ApplicationUser.Email"  class="text-danger" />
     </p>
-
+    <!--ADMIN for user -->
+    @if (User.IsInRole(ShopM4_Utility.PathManager.AdminRole))
+    {
+        <p>
+            <label>City</label>
+            <input type="text" asp-for="@Model.ApplicationUser.City" class="form-control" />
+            <span asp-validation-for="ApplicationUser.City" class="text-danger"/>
+        </p>
+        <p>
+            <label>Street</label>
+            <input type="text" asp-for="@Model.ApplicationUser.Street" class="form-control" />
+            <span asp-validation-for="ApplicationUser.Street" class="text-danger" />
+        </p>
+        <p>
+            <label>House</label>
+            <input type="text" asp-for="@Model.ApplicationUser.House" class="form-control" />
+            <span asp-validation-for="ApplicationUser.House" class="text-danger" />
+        </p>
+        <p>
+            <label>Apartment</label>
+            <input type="text" asp-for="@Model.ApplicationUser.Apartment" class="form-control" />
+            <span asp-validation-for="ApplicationUser.Apartment" class="text-danger" />
+        </p>
+        <p>
+            <label>PostalCode</label>
+            <input type="text" asp-for="@Model.ApplicationUser.PostalCode" class="form-control" />
+            <span asp-validation-for="ApplicationUser.PostalCode" class="text-danger" />
+        </p>
+    }
 
     <!-- Products -->
 
@@ -37,9 +68,23 @@
         </p>
     }
 
+    @if (User.IsInRole(ShopM4_Utility.PathManager.AdminRole))
+    {
+        <p>
+            <button type="submit" class="btn btn-success form-control">Submit Order</button>
+        </p>
+    }
+    else
+    {
+        <p>
+            <button type="submit" class="btn btn-success form-control">Submit Query</button>
+        </p>
+    }
 
-    <p>
-        <button type="submit" class="btn btn-success form-control">Submit</button>
-    </p>
 
 </form>
+@section Scripts {
+    @{
+        <partial name="_ValidationScriptsPartial" />
+    }
+}

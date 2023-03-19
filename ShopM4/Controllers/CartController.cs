@@ -130,68 +130,95 @@ namespace ShopM4.Controllers
             var claim = identityClaims.FindFirst(ClaimTypes.NameIdentifier);
 
 
-            // код для отправки сообщения
-            // combine
-            var path = webHostEnvironment.WebRootPath + Path.DirectorySeparatorChar.ToString() +
-                "templates" + Path.DirectorySeparatorChar.ToString() + "Inquiry.html";
-
-            var subject = "New Order";
-
-            string bodyHtml = "";
-
-            using (StreamReader reader = new StreamReader(path))
+            if (User.IsInRole(PathManager.AdminRole))
             {
-                bodyHtml = reader.ReadToEnd();
-            }
+                // Work with ORDER
 
-            string textProducts = "";
-            foreach (var item in productUserViewModel.ProductList)
-            {
-                textProducts += $"- Name: {item.Name}, ID: {item.Id}\n";
-            }
-
-            string body = string.Format(bodyHtml, productUserViewModel.ApplicationUser.FullName,
-                productUserViewModel.ApplicationUser.Email,
-                productUserViewModel.ApplicationUser.PhoneNumber,
-                textProducts
-            );
-
-            await emailSender.SendEmailAsync(productUserViewModel.ApplicationUser.Email, subject, body);
-            await emailSender.SendEmailAsync("viosagmir@gmail.com", subject, body);
-
-            // добавление данных в БД по заказу
-            QueryHeader queryHeader = new QueryHeader()
-            {
-                ApplicationUserId = claim.Value,
-                QueryDate = DateTime.Now,
-                FullName = productUserViewModel.ApplicationUser.FullName,
-                PhoneNumber = productUserViewModel.ApplicationUser.PhoneNumber,
-                Email = productUserViewModel.ApplicationUser.Email,
-                ApplicationUser = repositoryApplicationUser.FirstOrDefault(x => x.Id == claim.Value)
-            };
-
-            repositoryQueryHeader.Add(queryHeader);
-            repositoryQueryHeader.Save();
-
-
-            // сделать запись деталей - всех продуктов в БД
-            foreach (var item in productUserViewModel.ProductList)
-            {
-                QueryDetail queryDetail = new QueryDetail()
+                OrderHeader orderHeader = new OrderHeader()
                 {
-                    ProductId = item.Id,
-                    QueryHeaderId = queryHeader.Id,
-                    QueryHeader = queryHeader,
-                    Product = repositoryProduct.Find(item.Id)
+                    AdminId = claim.Value,
+                    DateOrder = DateTime.Now,
+                    TotalPrice = 0,                 // !!!
+                    Status = "",
+                    FullName = productUserViewModel.ApplicationUser.FullName,
+                    Email = productUserViewModel.ApplicationUser.Email,
+                    Phone = productUserViewModel.ApplicationUser.PhoneNumber,
+                    City = productUserViewModel.ApplicationUser.City,
+                    Street = productUserViewModel.ApplicationUser.Street,
+                    House = productUserViewModel.ApplicationUser.House,
+                    Apartment = productUserViewModel.ApplicationUser.Apartment,
+                    PostalCode = productUserViewModel.ApplicationUser.PostalCode
+                };
+            }
+            else
+            {
+                // Work with QUERY
+
+                // код для отправки сообщения
+                // combine
+                var path = webHostEnvironment.WebRootPath + Path.DirectorySeparatorChar.ToString() +
+                    "templates" + Path.DirectorySeparatorChar.ToString() + "Inquiry.html";
+
+                var subject = "New Query";
+
+                string bodyHtml = "";
+
+                using (StreamReader reader = new StreamReader(path))
+                {
+                    bodyHtml = reader.ReadToEnd();
+                }
+
+                string textProducts = "";
+                foreach (var item in productUserViewModel.ProductList)
+                {
+                    textProducts += $"- Name: {item.Name}, ID: {item.Id}\n";
+                }
+
+                string body = string.Format(bodyHtml, productUserViewModel.ApplicationUser.FullName,
+                    productUserViewModel.ApplicationUser.Email,
+                    productUserViewModel.ApplicationUser.PhoneNumber,
+                    textProducts
+                );
+
+                await emailSender.SendEmailAsync(productUserViewModel.ApplicationUser.Email, subject, body);
+                await emailSender.SendEmailAsync("viosagmir@gmail.com", subject, body);
+
+                // добавление данных в БД по заказу
+                QueryHeader queryHeader = new QueryHeader()
+                {
+                    ApplicationUserId = claim.Value,
+                    QueryDate = DateTime.Now,
+                    FullName = productUserViewModel.ApplicationUser.FullName,
+                    PhoneNumber = productUserViewModel.ApplicationUser.PhoneNumber,
+                    Email = productUserViewModel.ApplicationUser.Email,
+                    ApplicationUser = repositoryApplicationUser.FirstOrDefault(x => x.Id == claim.Value)
                 };
 
-                repositoryQueryDetail.Add(queryDetail);
+                repositoryQueryHeader.Add(queryHeader);
+                repositoryQueryHeader.Save();
+
+
+                // сделать запись деталей - всех продуктов в БД
+                foreach (var item in productUserViewModel.ProductList)
+                {
+                    QueryDetail queryDetail = new QueryDetail()
+                    {
+                        ProductId = item.Id,
+                        QueryHeaderId = queryHeader.Id,
+                        QueryHeader = queryHeader,
+                        Product = repositoryProduct.Find(item.Id)
+                    };
+
+                    repositoryQueryDetail.Add(queryDetail);
+                }
+                repositoryQueryDetail.Save();
             }
-            repositoryQueryDetail.Save();
 
 
             return RedirectToAction("InquiryConfirmation");
         }
+
+
         [HttpPost]
         public IActionResult Summary()
         {
