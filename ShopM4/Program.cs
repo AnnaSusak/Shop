@@ -6,6 +6,7 @@ using ShopM4_Utility;
 
 using ShopM4_DataMigrations.Repository;
 using ShopM4_DataMigrations.Repository.IRepository;
+using ShopM4_Utility.BrainTree;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,7 +34,7 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>().
     AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddTransient<IEmailSender, EmailSender>();   // EMAIL SENDER
-
+builder.Services.Configure<SettingsBrainTree>(builder.Configuration.GetSection("BrainTree"));
 
 builder.Services.AddScoped<IRepositoryCategory, RepositoryCategory>();
 builder.Services.AddScoped<IRepositoryMyModel, RepositoryMyModel>();

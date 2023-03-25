@@ -19,5 +19,9 @@ namespace ShopM4_Utility
 
         public const string Success = "Success";
         public const string Error = "Error";
+
+        public const string StatusPending = "Pending"; //ожидание
+        public const string StatusAccepted = "Accepted"; //утвержден
+        public const string StatusDenied = "Denied"; //отменен
     }
 }
