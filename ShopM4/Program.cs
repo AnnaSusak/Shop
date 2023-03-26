@@ -34,7 +34,9 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>().
     AddEntityFrameworkStores<ApplicationDbContext>();
 
 builder.Services.AddTransient<IEmailSender, EmailSender>();   // EMAIL SENDER
+
 builder.Services.Configure<SettingsBrainTree>(builder.Configuration.GetSection("BrainTree"));
+builder.Services.AddSingleton<IBrainTreeBridge, BrainTreeBridge>();
 
 builder.Services.AddScoped<IRepositoryCategory, RepositoryCategory>();
 builder.Services.AddScoped<IRepositoryMyModel, RepositoryMyModel>();
@@ -44,7 +46,6 @@ builder.Services.AddScoped<IRepositoryQueryDetail, RepositoryQueryDetail>();
 builder.Services.AddScoped<IRepositoryApplicationUser, RepositoryApplicationUser>();
 builder.Services.AddScoped<IRepositoryOrderHeader, RepositoryOrderHeader>();
 builder.Services.AddScoped<IRepositoryOrderDetail, RepositoryOrderDetail>();
-
 builder.Services.AddControllersWithViews();  // MVC
 
 var app = builder.Build();

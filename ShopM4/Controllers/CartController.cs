@@ -12,6 +12,8 @@ using ShopM4_Models;
 using ShopM4_Models.ViewModels;
 using ShopM4_Utility;
 using ShopM4_DataMigrations.Repository.IRepository;
+using ShopM4_Utility.BrainTree;
+using Braintree;
 
 namespace ShopM4.Controllers
 {
@@ -30,14 +32,18 @@ namespace ShopM4.Controllers
 
         IRepositoryQueryHeader repositoryQueryHeader;
         IRepositoryQueryDetail repositoryQueryDetail;
+
         IRepositoryOrderHeader repositoryOrderHeader;
         IRepositoryOrderDetail repositoryOrderDetail;
+
+        IBrainTreeBridge brainTreeBridge;
 
         public CartController(IWebHostEnvironment webHostEnvironment,
             IEmailSender emailSender, IRepositoryProduct repositoryProduct,
             IRepositoryApplicationUser repositoryApplicationUser,
             IRepositoryQueryHeader repositoryQueryHeader, IRepositoryQueryDetail repositoryQueryDetail,
-            IRepositoryOrderHeader repositoryOrderHeader, IRepositoryOrderDetail repositoryOrderDetail)
+            IRepositoryOrderHeader repositoryOrderHeader, IRepositoryOrderDetail repositoryOrderDetail,
+            IBrainTreeBridge brainTreeBridge)
         {
             this.webHostEnvironment = webHostEnvironment;
             this.emailSender = emailSender;
@@ -45,8 +51,11 @@ namespace ShopM4.Controllers
             this.repositoryProduct = repositoryProduct;
             this.repositoryQueryHeader = repositoryQueryHeader;
             this.repositoryQueryDetail = repositoryQueryDetail;
+
             this.repositoryOrderHeader = repositoryOrderHeader;
             this.repositoryOrderDetail = repositoryOrderDetail;
+
+            this.brainTreeBridge = brainTreeBridge;
         }
 
 
@@ -120,16 +129,18 @@ namespace ShopM4.Controllers
             return RedirectToAction("Index");
         }
 
-        public IActionResult InquiryConfirmation(int id=0)
+        public IActionResult InquiryConfirmation(int id = 0)
         {
-            OrderHeader orderHeader=repositoryOrderHeader.FirstOrDefault(x => x.Id == id);
+            OrderHeader orderHeader = repositoryOrderHeader.FirstOrDefault(x => x.Id == id);
+
             HttpContext.Session.Clear();   // очистить полностью сессию
 
-            return View();
+            return View(orderHeader);
         }
 
         [HttpPost]
-        public async Task<IActionResult> SummaryPost(ProductUserViewModel productUserViewModel)
+        public async Task<IActionResult> SummaryPost(IFormCollection collection,
+            ProductUserViewModel productUserViewModel)
         {
             // work with user
             var identityClaims = (ClaimsIdentity)User.Identity;
@@ -140,15 +151,18 @@ namespace ShopM4.Controllers
             {
                 // Work with ORDER
                 double totalPrice = 0;
+
                 foreach (var item in productUserViewModel.ProductList)
                 {
                     totalPrice += item.TempCount * item.Price;
                 }
+
+
                 OrderHeader orderHeader = new OrderHeader()
                 {
                     AdminId = claim.Value,
                     DateOrder = DateTime.Now,
-                    TotalPrice = totalPrice,                 
+                    TotalPrice = totalPrice,
                     Status = PathManager.StatusPending,
                     FullName = productUserViewModel.ApplicationUser.FullName,
                     Email = productUserViewModel.ApplicationUser.Email,
@@ -159,21 +173,48 @@ namespace ShopM4.Controllers
                     Apartment = productUserViewModel.ApplicationUser.Apartment,
                     PostalCode = productUserViewModel.ApplicationUser.PostalCode
                 };
+
+
                 repositoryOrderHeader.Add(orderHeader);
                 repositoryOrderHeader.Save();
+
+
                 foreach (var product in productUserViewModel.ProductList)
                 {
                     OrderDetail orderDetail = new OrderDetail()
                     {
-                        OrderHeaderId=orderHeader.Id,
-                        ProductId=product.Id,
-                        Count=product.TempCount,
-                        PricePerUnit=(int)product.Price //!!!
+                        OrderHeaderId = orderHeader.Id,
+                        ProductId = product.Id,
+                        Count = product.TempCount,
+                        PricePerUnit = (int)product.Price    // !!! fix need 
                     };
+
                     repositoryOrderDetail.Add(orderDetail);
                 }
+
                 repositoryOrderDetail.Save();
-                return RedirectToAction("InquiryConfirmation", new { orderHeader.Id } );
+
+
+
+                string nonce = collection["payment_method_nonce"];
+
+                var request = new TransactionRequest
+                {
+                    Amount = 1,
+                    PaymentMethodNonce = nonce,
+                    OrderId = "1",
+                    Options = new TransactionOptionsRequest { SubmitForSettlement = true }  // автоматическое подтверждение
+                };
+
+                var getWay = brainTreeBridge.GetGateWay();
+
+                var resultTransaction = getWay.Transaction.Sale(request);
+
+                var id = resultTransaction.Target.Id;
+                var status = resultTransaction.Target.ProcessorResponseText;
+
+
+                return RedirectToAction("InquiryConfirmation", new { orderHeader.Id });
             }
             else
             {
@@ -251,7 +292,6 @@ namespace ShopM4.Controllers
 
             if (User.IsInRole(PathManager.AdminRole))   // работа админа в корзине
             {
-
                 // корзина заполняется на основании существуещего запроса
                 if (HttpContext.Session.Get<int>(PathManager.SessionQuery) != 0)
                 {
@@ -271,6 +311,12 @@ namespace ShopM4.Controllers
                 {
                     applicationUser = new ApplicationUser();
                 }
+
+
+                // РАБОТА С ОПЛАТОЙ
+                var getWay = brainTreeBridge.GetGateWay();
+                var tokenClient = getWay.ClientToken.Generate();
+                ViewBag.TokenClient = tokenClient;
             }
             else    // работа юзера с корзиной
             {
