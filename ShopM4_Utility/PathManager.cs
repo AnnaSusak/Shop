@@ -23,5 +23,6 @@ namespace ShopM4_Utility
         public const string StatusPending = "Pending"; //ожидание
         public const string StatusAccepted = "Accepted"; //утвержден
         public const string StatusDenied = "Denied"; //отменен
+        public static IEnumerable<string> StatusList=new List<string>() { StatusAccepted,StatusDenied, StatusPending};
     }
 }

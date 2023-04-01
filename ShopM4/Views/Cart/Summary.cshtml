@@ -5,6 +5,8 @@
 
 <form asp-action="SummaryPost" id="payment-form">
 
+
+
     <!-- User -->
     <p>
         <label>Name</label>
@@ -141,20 +143,20 @@
                 authorization: tokenClient,
                 container: '#dropin-container'
             },
-            // первый параметр для ошибки, второй - экземпляр подключения
-            function (error, dropinInstance) {
-                // тут происходит обработка события
-                form.addEventListener('submit', function () {
-                    // блочим автоматическую передачу формы
-                    event.preventDefault();
-                    // добавить nonce в форму и затем отправить ее
-                    dropinInstance.requestPaymentMethod(function (err, payload) {
-                        // отправить nonce на наш сервер
-                        document.querySelector('#nonce').value = payload.nonce;
-                        form.submit();
+                // первый параметр для ошибки, второй - экземпляр подключения
+                function (error, dropinInstance) {
+                    // тут происходит обработка события
+                    form.addEventListener('submit', function () {
+                        // блочим автоматическую передачу формы
+                        event.preventDefault();
+                        // добавить nonce в форму и затем отправить ее
+                        dropinInstance.requestPaymentMethod(function (err, payload) {
+                            // отправить nonce на наш сервер
+                            document.querySelector('#nonce').value = payload.nonce;
+                            form.submit();
+                        })
                     })
-                })
-            });
+                });
         </script>
     }
 }
