@@ -116,13 +116,13 @@
     @if (User.IsInRole(ShopM4_Utility.PathManager.AdminRole))
     {
         <p>
-            <button type="submit" class="btn btn-primary form-control">Submit Order</button>
+            <button type="submit" class="btn btn-primary form-control" onclick="return funcValidation()">Submit Order</button>
         </p>
     }
     else
     {
         <p>
-            <button type="submit" class="btn btn-success form-control">Submit Query</button>
+            <button type="submit" class="btn btn-success form-control" onclick="return funcValidation()">Submit Query</button>
         </p>
     }
 
@@ -157,6 +157,39 @@
                         })
                     })
                 });
+       
+                
+          // функция валидации
+          function funcValidation(){
+              var full_name=document.getElementById("ApplicationUser_FullName").value
+                var phone = document.getElementById("ApplicationUser_PhoneNumber").value
+                var email = document.getElementById("ApplicationUser_Email").value
+              if(full_name==''){
+                    Swal.fire(
+                        'Error!',
+                        'Пожалуйста, введите имя!',
+                        'error'
+                    )
+                    return false;
+                }
+                if (phone == '') {
+                    Swal.fire(
+                        'Error!',
+                        'Пожалуйста, введите номер телефона!',
+                        'error'
+                    )
+                    return false;
+                }
+                if (email == '') {
+                    Swal.fire(
+                        'Error!',
+                        'Пожалуйста, введите email!',
+                        'error'
+                    )
+                    return false;
+                }
+                return true;
+          }
         </script>
     }
 }

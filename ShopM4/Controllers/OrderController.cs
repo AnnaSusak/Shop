@@ -19,11 +19,14 @@ using ShopM4_Models.ViewModels;
 using Microsoft.AspNetCore.Mvc.Rendering;
 namespace ShopM4.Controllers
 {
-    public class OrderController:Controller
+    public class OrderController : Controller
     {
         IRepositoryOrderHeader repositoryOrderHeader;
         IRepositoryOrderDetail repositoryOrderDetail;
         IBrainTreeBridge brainTreeBridge;
+
+        [BindProperty]
+        public OrderHeaderDetailViewModel OrderViewModel { get; set; }
 
         public OrderController(IRepositoryOrderHeader repositoryOrderHeader,
             IRepositoryOrderDetail repositoryOrderDetail, IBrainTreeBridge brainTreeBridge)
@@ -33,7 +36,8 @@ namespace ShopM4.Controllers
             this.repositoryOrderHeader = repositoryOrderHeader;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(string searchName = null, string searchEmail = null,
+                    string searchPhone = null, string status = null)
         {
             OrderViewModel viewModel = new OrderViewModel()
             {
@@ -42,7 +46,45 @@ namespace ShopM4.Controllers
                              Select(x => new SelectListItem { Text = x, Value = x })
             };
 
+            if (searchName != null)
+            {
+                viewModel.OrderHeaderlist = viewModel.OrderHeaderlist.
+                    Where(x => x.FullName.ToLower().Contains(searchName.ToLower()));
+            }
+
+            if (searchEmail != null)
+            {
+                viewModel.OrderHeaderlist = viewModel.OrderHeaderlist.
+                    Where(x => x.Email.ToLower().Contains(searchEmail.ToLower()));
+            }
+
+            if (searchPhone != null)
+            {
+                viewModel.OrderHeaderlist = viewModel.OrderHeaderlist.
+                    Where(x => x.Phone.Contains(searchPhone));
+            }
+
+            if (status != null && status != "Choose Status")
+            {
+                viewModel.OrderHeaderlist = viewModel.OrderHeaderlist.
+                    Where(x => x.Status.Contains(status));
+            }
+
             return View(viewModel);
         }
+
+
+        public IActionResult Details(int id)
+        {
+            OrderViewModel = new OrderHeaderDetailViewModel()
+            {
+                OrderHeader = repositoryOrderHeader.FirstOrDefault(x => x.Id == id),
+                OrderDetail = repositoryOrderDetail.GetAll(x => x.OrderHeaderId == id, includeProperties: "Product")
+            };
+
+
+            return View(OrderViewModel);
+        }
+
     }
 }
