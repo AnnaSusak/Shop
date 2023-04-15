@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using ShopM4_Utility;
+using ShopM4_Utility.BrainTree;
 
 using ShopM4_DataMigrations.Repository;
 using ShopM4_DataMigrations.Repository.IRepository;
-using ShopM4_Utility.BrainTree;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,7 +33,14 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>().
     AddDefaultUI().AddDefaultTokenProviders().
     AddEntityFrameworkStores<ApplicationDbContext>();
 
+builder.Services.AddAuthentication().AddGoogle(googleOptions =>
+{
+    googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"];
+    googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+});
+
 builder.Services.AddTransient<IEmailSender, EmailSender>();   // EMAIL SENDER
+
 
 builder.Services.Configure<SettingsBrainTree>(builder.Configuration.GetSection("BrainTree"));
 builder.Services.AddSingleton<IBrainTreeBridge, BrainTreeBridge>();
@@ -46,6 +53,7 @@ builder.Services.AddScoped<IRepositoryQueryDetail, RepositoryQueryDetail>();
 builder.Services.AddScoped<IRepositoryApplicationUser, RepositoryApplicationUser>();
 builder.Services.AddScoped<IRepositoryOrderHeader, RepositoryOrderHeader>();
 builder.Services.AddScoped<IRepositoryOrderDetail, RepositoryOrderDetail>();
+
 builder.Services.AddControllersWithViews();  // MVC
 
 var app = builder.Build();
@@ -96,4 +104,3 @@ app.UseSession();     // добавление middleware для работы с 
 }); */
 
 app.Run();
-
