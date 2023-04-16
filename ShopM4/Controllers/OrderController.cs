@@ -19,7 +19,7 @@ using ShopM4_Models.ViewModels;
 using Microsoft.AspNetCore.Mvc.Rendering;
 namespace ShopM4.Controllers
 {
-    ublic class OrderController : Controller
+    public class OrderController : Controller
     {
         IRepositoryOrderHeader repositoryOrderHeader;
         IRepositoryOrderDetail repositoryOrderDetail;
@@ -41,32 +41,32 @@ namespace ShopM4.Controllers
         {
             OrderViewModel viewModel = new OrderViewModel()
             {
-                OrderHeaderList = repositoryOrderHeader.GetAll(),
+                OrderHeaderlist = repositoryOrderHeader.GetAll(),
                 StatusList = PathManager.StatusList.ToList().
                              Select(x => new SelectListItem { Text = x, Value = x })
             };
 
             if (searchName != null)
             {
-                viewModel.OrderHeaderList = viewModel.OrderHeaderList.
+                viewModel.OrderHeaderlist = viewModel.OrderHeaderlist.
                     Where(x => x.FullName.ToLower().Contains(searchName.ToLower()));
             }
 
             if (searchEmail != null)
             {
-                viewModel.OrderHeaderList = viewModel.OrderHeaderList.
+                viewModel.OrderHeaderlist = viewModel.OrderHeaderlist.
                     Where(x => x.Email.ToLower().Contains(searchEmail.ToLower()));
             }
 
             if (searchPhone != null)
             {
-                viewModel.OrderHeaderList = viewModel.OrderHeaderList.
+                viewModel.OrderHeaderlist = viewModel.OrderHeaderlist.
                     Where(x => x.Phone.Contains(searchPhone));
             }
 
             if (status != null && status != "Choose Status")
             {
-                viewModel.OrderHeaderList = viewModel.OrderHeaderList.
+                viewModel.OrderHeaderlist = viewModel.OrderHeaderlist.
                     Where(x => x.Status.Contains(status));
             }
 

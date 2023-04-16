@@ -39,6 +39,11 @@ builder.Services.AddAuthentication().AddGoogle(googleOptions =>
     googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
 });
 
+builder.Services.AddAuthentication().AddFacebook(options =>
+{
+    options.AppId = "610266000696831";
+    options.AppSecret = "833945149e99dffa684bfe3b884ce51f";
+});
 builder.Services.AddTransient<IEmailSender, EmailSender>();   // EMAIL SENDER
 
 
