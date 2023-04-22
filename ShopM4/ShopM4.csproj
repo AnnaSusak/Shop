@@ -46,6 +46,11 @@
     <Content Remove="wwwroot\templates\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Areas\Identity\Pages\Account\Manage\Email.cshtml" />
+    <None Include="Areas\Identity\Pages\Account\Manage\_ManageNav.cshtml" />
+    <None Include="Areas\Identity\Pages\Account\Manage\_ViewImports.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\ShopM4_Utility\ShopM4_Utility.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
