@@ -71,14 +71,14 @@
     <p>
         @if (Model.Product.Id != 0)
         {
-            <input type="submit" class="btn btn-success" value="Update" />
+            <input type="submit" class="btn btn-outline-dark btn-circle" value="Update" />
         }
         else
         {
-            <input type="submit" onclick="input()" class="btn btn-success" value="Create" />
+            <input type="submit" onclick="input()" class="btn btn-outline-dark btn-circle" value="Create" />
         }
 
-        <a class="btn btn-primary" asp-controller="Category" asp-action="Index"> Back </a>
+        <a class="btn btn-warning btn-circle" asp-controller="Category" asp-action="Index"> Back </a>
     </p>
 
     <p>

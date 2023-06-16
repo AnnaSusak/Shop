@@ -1,5 +1,11 @@
 ﻿@model ShopM4_Models.ViewModels.OrderHeaderDetailViewModel
 
+<style>
+    div {
+        margin: 20px;
+    }
+</style>
+
 <form method="post">
 
     <input asp-for="OrderHeader.Id" hidden />
@@ -11,7 +17,7 @@
                 <h1>Details</h1>
             </div>
             <div class="col-sm">
-                <a asp-controller="Order" asp-action="Index" class="btn form-control btn-primary">Return to Orders</a>
+                <a asp-controller="Order" asp-action="Index" class="btn form-control btn-circle btn-warning">Return to Orders</a>
             </div>
         </div>
 
@@ -122,7 +128,7 @@
             <!-- Product Details -->
             <div class="col-sm">
                 <div class="row">
-                    <h2>Product Details</h2>
+                    <em><h2>Product Details</h2></em>
                 </div>
 
                 @foreach (var item in Model.OrderDetail)
@@ -154,7 +160,7 @@
                 {
                     <div class="row m-2">
                         <div class="col-sm">
-                            <input asp-action="StartInProcessing" type="submit" value="In Processing" class="btn form-control btn-primary" />
+                            <input asp-action="StartInProcessing" type="submit" value="In Processing" class="btn form-control btn-circle btn-outline-dark" />
                         </div>
                     </div>
                 }
@@ -163,7 +169,7 @@
                 {
                     <div class="row m-2">
                         <div class="col-sm">
-                            <input asp-action="StartOrderDone" type="submit" value="Order Done" class="btn form-control btn-primary" />
+                            <input asp-action="StartOrderDone" type="submit" value="Order Done" class="btn form-control btn-circle btn-outline-dark" />
                         </div>
                     </div>
                 }
@@ -173,7 +179,7 @@
                     <div class="row m-2">
                         <div class="col-sm">
                             <input asp-action="StartOrderCancel" type="submit" value="Cancel Order"
-                                   class="btn form-control btn-primary" />
+                                   class="btn form-control btn-circle btn-outline-dark" />
                         </div>
                     </div>
                 }

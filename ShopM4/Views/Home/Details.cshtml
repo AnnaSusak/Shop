@@ -1,6 +1,11 @@
 ﻿@using ShopM4_Utility
 @model ShopM4_Models.ViewModels.DetailsViewModel
 
+<style>
+    img {
+        border-radius:15px;
+    }
+</style>
 
 <form method="post" asp-action="DetailsPost" asp-controller="Home">
 
@@ -9,7 +14,7 @@
     </p>
 
     <p>
-        <h2>@Model.Product.Name</h2>
+        <em><h1>@Model.Product.Name</h1></em>
 
         <h2>@Model.Product.Price</h2>
     </p>
@@ -44,17 +49,17 @@
     }
 
     <p>
-        <a class="btn btn-primary" asp-action="Index"> Back </a>
+        <a class="btn btn-warning btn-circle" asp-action="Index"> Back </a>
 
         @if (Model.IsInCart)
         {
-            <a asp-action="RemoveFromCart" asp-route-Id="@Model.Product.Id" class="btn btn-warning">
+            <a asp-action="RemoveFromCart" asp-route-Id="@Model.Product.Id" class="btn btn-warning btn-circle">
                 Remove from Cart
             </a>
         }
         else
         {
-            <button type="submit" asp-route-Id="@Model.Product.Id" class="btn btn-primary"
+            <button type="submit" asp-route-Id="@Model.Product.Id" class="btn btn-warning btn-circle"
                 asp-action="DetailsPost">
                 Add to cart
             </button>

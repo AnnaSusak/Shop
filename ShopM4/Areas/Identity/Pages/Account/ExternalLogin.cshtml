@@ -3,7 +3,11 @@
 @{
     ViewData["Title"] = "Register";
 }
-
+<style>
+    div {
+        margin: 20px;
+    }
+</style>
 <h1>@ViewData["Title"]</h1>
 <h2 id="external-login-title">Associate your @Model.ProviderDisplayName account.</h2>
 <hr />
@@ -37,7 +41,7 @@
                 <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
             </div>
 
-            <button type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
+            <button type="submit" class="w-100 btn btn-lg btn-circle btn-outline-dark">Register</button>
         </form>
     </div>
 </div>

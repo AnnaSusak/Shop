@@ -19,7 +19,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Category\" />
-    <Folder Include="Views\MyModel\" />
     <Folder Include="Views\Product\" />
     <Folder Include="wwwroot\images\" />
     <Folder Include="wwwroot\images\product\" />

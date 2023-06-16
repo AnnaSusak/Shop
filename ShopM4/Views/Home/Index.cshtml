@@ -7,13 +7,15 @@
 <div class="container">
 
     <div>
-        <button class="btn filter-button" data-filter="all">All</button>
-        @foreach (var item in Model.Categories)
-        {
-            <button class="btn filter-button" data-filter="@item.Name.Replace(' ','_')">
-                @item.Name
-            </button>
-        }
+        <button class="btn filter-button btn-outline-dark" data-filter="all">All</button>
+            @foreach (var item in Model.Categories)
+            {
+
+                <button class="btn filter-button btn-outline-dark" data-filter="@item.Name.Replace(' ','_')">
+                    @item.Name
+                </button>
+            }
+        
     </div>
 
     <div>

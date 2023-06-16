@@ -33,16 +33,93 @@ namespace ShopM4.Controllers
         // GET CREATE
         public IActionResult Create()
         {
-            // ???
             return View();
         }
 
+
         // POST CREATE
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Create(MyModel myModel)
         {
-            repositoryMyModel.Add(myModel);
+            if (ModelState.IsValid)
+            {
+                repositoryMyModel.Add(myModel);
+                repositoryMyModel.Save();
+
+                return RedirectToAction("Index");
+            }
+            return View(myModel);
+        }
+        // GET - Edit
+        [HttpGet]
+        public IActionResult Edit(int? id)
+        {
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+            var model = repositoryMyModel.Find(id.GetValueOrDefault());
+
+            if (model == null)
+            {
+                return NotFound();
+            }
+
+            return View(model);
+        }
+
+
+        // POST - Edit
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(MyModel model)
+        {
+            if (ModelState.IsValid)  // проверка модели на валидность
+            { 
+
+                repositoryMyModel.Update(model);
+                repositoryMyModel.Save();
+
+                return RedirectToAction("Index"); 
+            }
+
+            return View(model);
+        }
+
+        // GET - Delete
+        [HttpGet]
+        public IActionResult Delete(int? id)
+        {
+            if (id == null || id == 0)
+            {
+                return NotFound();
+            }
+            var model = repositoryMyModel.Find(id.GetValueOrDefault());
+
+            if (model == null)
+            {
+                return NotFound();
+            }
+
+            return View(model);
+        }
+
+        // POST - Delete
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeletePost(int? id)
+        {
+            var model = repositoryMyModel.Find(id.GetValueOrDefault());
+
+            if (model == null)
+            {
+                return NotFound();
+            }
+
+            repositoryMyModel.Remove(model);
             repositoryMyModel.Save();
+
 
             return RedirectToAction("Index");
         }

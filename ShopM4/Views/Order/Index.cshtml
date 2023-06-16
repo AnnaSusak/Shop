@@ -1,7 +1,7 @@
 ﻿@model ShopM4_Models.ViewModels.OrderViewModel
 
 
-<h1>Order Page</h1>
+<em><h1>Order Page</h1></em>
 
 
 <form method="get">
@@ -20,13 +20,14 @@
             @Html.DropDownListFor(x=>x.Status, Model.StatusList, "Choose Status", new {@class = "form-control"})
         </div>
         <div class="col-2">
-            <button type="submit" class="btn btn-info form control">Search</button>
+            <button type="submit" class="btn btn-outline-dark btn-circle form control">Search</button>
         </div>
     </div>
 </form>
 
-<div>
-    <ejs-grid id="Grid" dataSource="@Model.OrderHeaderlist" allowFiltering="true" allowSorting="true" allowPaging="true">
+<div >
+    <ejs-grid id="Grid" dataSource="@Model.OrderHeaderlist" allowFiltering="true" allowSorting="true" 
+    allowPaging="true" class="">
         <e-grid-filtersettings type="Menu"></e-grid-filtersettings>
         <e-grid-loadingIndicator indicatorType="Shimmer"></e-grid-loadingIndicator>
         <e-grid-pagesettings pageSize="2"></e-grid-pagesettings>
@@ -40,8 +41,9 @@
             </e-grid-column>
 
             <e-grid-column field="Id" headerText=""
-                           template="<a href = 'Order/Details/${Id}' class = 'btn btn-primary'> GO </a>"></e-grid-column>
+                           template="<a href = 'Order/Details/${Id}' class = 'btn btn-warning'> GO </a>"></e-grid-column>
 
         </e-grid-columns>
     </ejs-grid>
+   
 </div>

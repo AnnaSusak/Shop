@@ -1,15 +1,23 @@
 ﻿@using ShopM4_Utility
 @model ShopM4_Models.Product
+<style>
+    /* CSS */
+    
+    .card_circle{
+        border-radius: 20px;
+        font-size: 18px;
+    }
 
+</style>
 
-<div class="card filter @Model.Category.Name.Replace(' ','_')" style="float:left;width: 18rem;">
-    <img src="@PathManager.ImageProductPath@Model.Image" class="card-img-top" alt="...">
-    <div class="card-body">
-        <h5 class="card-title">@Model.Name</h5>
+<div class="card_circle card filter @Model.Category.Name.Replace(' ','_')" style="float:left;width: 18rem;">
+    <img src="@PathManager.ImageProductPath@Model.Image" class="card-img-top" alt="..." >
+    <div class="card-body ">
+        <em> <h5 class="card-title">@Model.Name</h5></em>
         <p class="card-text">
             @Model.ShortDescription
         </p>
         <span class="badge text-bg-primary">Primary</span>
-        <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-primary">Details</a>
+        <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-outline-dark btn-lg center-block btn-circle">Details</a>
     </div>
 </div>

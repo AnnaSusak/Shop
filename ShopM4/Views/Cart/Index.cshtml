@@ -3,10 +3,10 @@
 
 @model List<Product>
 
-<h1>Shooping Cart</h1>
+<em><h1>Shoping Cart</h1></em>
 
-<p><a class="btn btn-danger" asp-action="Clear">Clear</a></p>
-<p><a class="btn btn-primary" asp-controller="Home">Continue Shopping</a></p>
+<p><a class="btn btn-outline-danger btn-circle" asp-action="Clear">Clear</a></p>
+<p><a class="btn btn-outline-dark btn-circle" asp-controller="Home">Continue Shopping</a></p>
 
 
 @if (Model.Count() > 0)
@@ -41,7 +41,7 @@
             {
                 <p>
                     Count:
-                    <input type="text" asp-for="@Model[i].TempCount" class="form-control" />
+                    <input type="text" asp-for="@Model[i].TempCount" class="form-control btn-group-sm" />
                 </p>
 
                 <p>
@@ -52,8 +52,8 @@
             }
 
             <p>
-                <a class="btn btn-danger" asp-action="Remove" asp-route-Id="@Model[i].Id">
-                    TRASH
+                <a class="btn btn-outline-danger btn-circle" asp-action="Remove" asp-route-Id="@Model[i].Id">
+                    Trash
                 </a>
             </p>
         }
@@ -63,13 +63,13 @@
         {
             <h2>Total: @totalPriceProducts</h2>
 
-            <input type="submit" value="Update Cart" class="btn btn-info form-control"
+            <input type="submit" value="Update Cart" class="btn btn-outline-dark btn-circle form-control"
            asp-action="Update" formmethod="post" name="Update" />
         }
 
 
         <p>
-            <button type="submit" class="btn btn-success">
+            <button type="submit" class="btn btn-warning">
                 Continue
             </button>
         </p>

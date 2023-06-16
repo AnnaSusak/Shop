@@ -1,0 +1,24 @@
+﻿@model MyModel
+
+<em><h1>Delete Model</h1></em>
+
+<form method="post" asp-action="DeletePost">
+
+    <!-- Передача скрытых данных -->
+    <input asp-for="Id" hidden />
+
+    <p>
+        <label asp-for="Name"></label>
+        <input disabled asp-for="Name" class="form-control" />
+    </p>
+
+    <p>
+        <label asp-for="Number"></label>
+        <input disabled asp-for="Number" class="form-control" />
+    </p>
+
+    <p>
+        <input type="submit" class="tn btn-outline-danger btn-circle" value="Delete" />
+        <a class="btn btn-outline-dark btn-circle" asp-controller="MyModel" asp-action="Index"> Back </a>
+    </p>
+</form>

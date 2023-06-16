@@ -2,6 +2,11 @@
 @model RegisterModel
 
 
+<style>
+    div{
+        margin:20px;
+    }
+</style>
 @if (User.IsInRole(ShopM4_Utility.PathManager.AdminRole))
 {
     <h1>You can register an Admin Account</h1>
@@ -43,13 +48,13 @@ else
 
             @if (User.IsInRole(ShopM4_Utility.PathManager.AdminRole))
             {
-                <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-warning">
+                <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-warning btn-circle">
                     Register Admin User
                 </button>
             }
             else
             {
-                <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">
+                <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-outline-dark btn-circle">
                     Register Simple User
                 </button>
             }
@@ -82,7 +87,7 @@ else
                             <p>
                                 @foreach (var provider in Model.ExternalLogins)
                                 {
-                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                                    <button type="submit" class="btn btn-warning btn-circle" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
                                 }
                             </p>
                         </div>
